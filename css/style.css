@@ -1,3 +1,7 @@
+ @font-face {
+  font-family: 'SevenSegment';
+  src: url('../fonts/Seven\ Segment.ttf') format('truetype');
+}
  .main
  {
         display: flex;
@@ -43,3 +47,21 @@
   justify-content: space-between;
   box-sizing: border-box;
 }
+
+.timerGame {
+  font-family: 'SevenSegment', monospace;
+  font-size: 36px; 
+  color: #ff0000;
+  background-color: #111;
+  padding: 4px 0;
+  border-radius: 8px;
+  border: 3px solid #ff1a1a;
+  width: 35%; 
+  text-align: center;
+  user-select: none;
+  letter-spacing: 4px;
+  font-weight: bolder;
+
+
+}
+
