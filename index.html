@@ -1,34 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MineSweeper</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=DS-Digital&display=swap" rel="stylesheet">
-</head>
-<body>
-         <div class="nav">
-                    Nav
-        </div>
-    <div class="main">
-        <div class="container">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>MineSweeper</title>
+      <link rel="stylesheet" href="css/style.css">
+      <link href="https://fonts.googleapis.com/css2?family=DS-Digital&display=swap" rel="stylesheet">
+   </head>
+   <body>
+      <div class="nav">
+         Nav
+      </div>
+      <div class="main">
+         <div class="container">
             <div class="playButtons">
-                <div class="counterGame">
-                    Contador
-                </div>
-                <div class="resetGameButton">
-                    😊 
-                </div>
-                <div class="timerGame">
-                    00:00
-                </div>
+               <div class="counterGame">
+                  <span id="mine-counter">010</span>
+               </div>
+               <div class="resetGameButton">
+                  😊 
+               </div>
+               <div class="timerGame">
+                  00:00
+               </div>
             </div>
             <div class="grid">
-        
             </div>
-        </div>
-    </div>
-<script src="js/script.js" ></script>
-</body>
+            <button id="openBtn" class="rankingBtn">Ver Ranking</button>
+            <div id="rankingModal" class="modal">
+               <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <h2>Ranking</h2>
+                  <table class="rankingTable">
+                     <thead>
+                        <tr>
+                           <th>Jugador</th>
+                           <th>Puntaje</th>
+                           <th>Duración</th>
+                           <th>Fecha</th>
+                        </tr>
+                     </thead>
+                     <tbody id="rankingBody"></tbody>
+                  </table>
+               </div>
+            </div>
+            <div id="errorMsg" class="error"></div>
+         </div>
+      </div>
+      <script src="js/script.js" ></script>
+   </body>
 </html>
