@@ -10,6 +10,9 @@ window.addEventListener('DOMContentLoaded', function () {
    var columnas = 8;
    var cellSize = 40;
    var gap = 2;
+   var posicionMinas = [];
+
+   posicionMinas = generaMinas(columnas,filas);
 
    var container = document.querySelector('.container');
    var grid = document.querySelector('.grid');
@@ -28,6 +31,25 @@ window.addEventListener('DOMContentLoaded', function () {
       cell.id = 'cell-' + i;
       cell.textContent = i;
       grid.appendChild(cell);
+      //Este es la funcion que escucha los clicks
+      (function (c) {
+         c.addEventListener("click", function () {
+            var partes = c.id.split("-");
+            var r = parseInt(partes[1], 10);
+            if (posicionMinas.indexOf(r) !== -1) {
+               //alert("Hay una mina en " + r);
+               c.className = 'cell-mine';
+               c.textContent = ''; // Borra el texto
+               c.style.backgroundImage = 'url("img/mine.jpeg")';
+               c.style.backgroundSize = 'cover';
+               c.style.backgroundPosition = 'center';
+            }else{
+               c.className = 'cell-reveal';
+               c.textContent = contarMinasAlrededor(r, posicionMinas);
+               
+            }
+         });
+      })(cell);
    }
    clearRanking();
 
@@ -66,6 +88,12 @@ window.addEventListener('DOMContentLoaded', function () {
 
 });
 
+var boton = document.getElementById("cell-1");
+
+boton.addEventListener("click", function () {
+  alert("¡Click detectado en celda 1!");
+});
+
 function startTimer(timerDisplay) {
    if (isTimerRunning) return;
    isTimerRunning = true;
@@ -101,6 +129,7 @@ function validateName(name) {
    return /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{3,}$/.test(name.trim());
 }
 
+// REVISAR ESTO 
 var totalMines = 10;
 var flagsPlaced = 0;
 
@@ -219,4 +248,54 @@ function mostrarToast() {
 function cerrarToast() {
    toast.classList.remove("mostrar");
    clearTimeout(timeoutId);
+}
+
+function generaMinas(columnas, filas) {
+   //Hay que agregar las condiciones por si cambia el tamaño cambia la cantidad de  minas
+   if (columnas == 8 && filas == 8) {
+      var minas = 10;
+   }
+   var min = 0
+   var max = (columnas * filas)-1
+
+   var arrayMinas = [];
+   var aux = 0
+
+   for (var index = 0; index < minas; index++) {
+
+      aux = numeroAleatorio(min, max);
+      while (arrayMinas.indexOf(aux) !== -1) {
+         aux = numeroAleatorio(min, max);
+      }
+      arrayMinas[index] = aux; 
+      
+   }
+   //Borrar
+   console.log("Minas generadas");
+   console.log(arrayMinas);
+   //
+   return arrayMinas;
+
+}
+
+function numeroAleatorio(min, max) {
+   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+if (miArray.indexOf(valor) !== -1) {
+  // El valor está en el arreglo
+}
+
+function contarMinasAlrededor(celda, minas){
+   var cMinas = 0
+   var perimetro = [celda+8, celda-8, celda-1, celda+1, (celda+1)+ 8, (celda+1)- 8, (celda-1)+ 8, (celda-1)- 8]
+   //Borrar
+   console.log(perimetro)
+
+   for (let index = 0; index < perimetro.length; index++) {
+      if (minas.indexOf(perimetro[index]) !== -1){
+         cMinas++;
+      }
+   }
+   return cMinas;
 }
