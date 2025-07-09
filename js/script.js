@@ -1,6 +1,9 @@
 var seconds = 0;
 var isTimerRunning = false;
 var timerInterval = null;
+var toast;
+var timeoutId;
+
 
 window.addEventListener('DOMContentLoaded', function () {
    var filas = 8;
@@ -58,6 +61,9 @@ window.addEventListener('DOMContentLoaded', function () {
    };
 
 
+   toast = document.getElementById("toast");
+   showError("Aca van los mensajes de errores");
+
 });
 
 function startTimer(timerDisplay) {
@@ -105,13 +111,21 @@ function updateMineCounter() {
 
 
 function showError(message) {
-   var err = document.getElementById("errorMsg");
-   err.textContent = message;
-   err.style.display = "block";
-   setTimeout(function () {
-      err.style.display = "none";
-   }, 3000);
+   if (!toast) return;
+
+   toast.innerHTML = '<span class="cerrar">×</span> ' + message;
+
+   var cerrarBtn = toast.querySelector(".cerrar");
+   cerrarBtn.addEventListener("click", cerrarToast);
+
+   toast.classList.add("mostrar");
+
+   clearTimeout(timeoutId);
+   timeoutId = setTimeout(function () {
+      toast.classList.remove("mostrar");
+   }, 5000);
 }
+
 
 function saveResult(playerName, score, duration) {
    var results = JSON.parse(localStorage.getItem("minesweeperResults")) || [];
@@ -149,11 +163,6 @@ function renderRanking() {
       rankingBody.appendChild(row);
    }
 }
-
-
-var modal = document.getElementById("rankingModal");
-var btn = document.getElementById("openBtn");
-var span = document.getElementsByClassName("close")[0];
 
 
 btn.onclick = function () {
@@ -197,4 +206,17 @@ function clearRanking() {
    localStorage.removeItem("minesweeperResults");
    renderRanking();
    console.log("Ranking eliminado.");
+}
+
+function mostrarToast() {
+   toast.classList.add("mostrar");
+   clearTimeout(timeoutId);
+   timeoutId = setTimeout(function () {
+      toast.classList.remove("mostrar");
+   }, 6000);
+}
+
+function cerrarToast() {
+   toast.classList.remove("mostrar");
+   clearTimeout(timeoutId);
 }
