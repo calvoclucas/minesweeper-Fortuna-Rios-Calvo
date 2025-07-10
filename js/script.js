@@ -46,17 +46,28 @@ window.addEventListener('DOMContentLoaded', function () {
                c.style.backgroundImage = 'url("img/mine.jpeg")';
                c.style.backgroundSize = 'cover';
                c.style.backgroundPosition = 'center';
+               stopTimer();
             }else{
                c.className = 'cell-reveal';
-               c.textContent = contarMinasAlrededor(r, posicionMinas);
-               
+               var nMinas = contarMinasAlrededor(r, posicionMinas);
+               console.log(nMinas);
+               c.textContent = nMinas[0];
+               if (nMinas[0] == '') {
+                  for (let i = 0; i < nMinas[1].length; i++) {
+                     var concat = "cell-" + nMinas[1][i];
+                     var ad = document.getElementById(concat);
+                     ad.className = "cell-reveal";
+                     var au = contarMinasAlrededor(nMinas[1][i], posicionMinas);
+                     ad.textContent = au[0];
+                  }
+               }
             }
          });
          c.addEventListener("contextmenu",function(e){
             e.preventDefault();
             var partes = c.id.split("-");
             var r = parseInt(partes[1], 10);
-            if (flagsPlaced < totalMines) {
+            if (flagsPlaced < totalMines && c.classList[0] != "cell-reveal" && c.classList[0] != "cell-mine") {
                if (c.textContent == "🚩") {
                   c.textContent = r;
                   flagsPlaced--;
@@ -285,10 +296,6 @@ function generaMinas(columnas, filas) {
       arrayMinas[index] = aux; 
       
    }
-   //Borrar
-   console.log("Minas generadas");
-   console.log(arrayMinas);
-   //
    return arrayMinas;
 
 }
@@ -312,7 +319,7 @@ function contarMinasAlrededor(celda, minas){
    if (cMinas == 0) {
       cMinas = '';
    }
-   return cMinas;
+   return [cMinas, perimetro];
 }
 
 function validarPerimetro(celda, filas){
@@ -325,11 +332,8 @@ function validarPerimetro(celda, filas){
       }
       celdasPerimetrales.push((filas*filas)-index);
    }
-   console.log(celdasPerimetrales)
    var aux = celda/filas
    if (celdasPerimetrales.indexOf(celda)!== -1) {
-      console.log(celda);
-      console.log(celda/filas);
       if (celda/filas == filas){
          var perimetro = [celda-8, celda-1, celda+1, (celda+1)- 8, (celda-1)- 8]
       } else if (celda/filas > filas-1) {
@@ -348,6 +352,5 @@ function validarPerimetro(celda, filas){
    }else{
       var perimetro = [celda+8, celda-8, celda-1, celda+1, (celda+1)+ 8, (celda+1)- 8, (celda-1)+ 8, (celda-1)- 8];
    }
-   console.log(perimetro);
    return perimetro;
 }
