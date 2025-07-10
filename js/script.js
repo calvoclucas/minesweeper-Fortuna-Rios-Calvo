@@ -4,6 +4,9 @@ var timerInterval = null;
 var toast;
 var timeoutId;
 
+// REVISAR ESTO 
+var totalMines = 10;
+var flagsPlaced = 0;
 
 window.addEventListener('DOMContentLoaded', function () {
    var filas = 8;
@@ -47,6 +50,21 @@ window.addEventListener('DOMContentLoaded', function () {
                c.className = 'cell-reveal';
                c.textContent = contarMinasAlrededor(r, posicionMinas);
                
+            }
+         });
+         c.addEventListener("contextmenu",function(e){
+            e.preventDefault();
+            var partes = c.id.split("-");
+            var r = parseInt(partes[1], 10);
+            if (flagsPlaced < totalMines) {
+               if (c.textContent == "🚩") {
+                  c.textContent = r;
+                  flagsPlaced--;
+               }else{
+                  c.textContent = "🚩"
+                  flagsPlaced++;
+               }
+               updateMineCounter();
             }
          });
       })(cell);
@@ -129,9 +147,6 @@ function validateName(name) {
    return /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{3,}$/.test(name.trim());
 }
 
-// REVISAR ESTO 
-var totalMines = 10;
-var flagsPlaced = 0;
 
 function updateMineCounter() {
    var remaining = totalMines - flagsPlaced;
@@ -289,7 +304,7 @@ if (miArray.indexOf(valor) !== -1) {
 function contarMinasAlrededor(celda, minas){
    var cMinas = 0
    var perimetro = validarPerimetro(celda,8);
-   for (let index = 0; index < perimetro.length; index++) {
+   for (var index = 0; index < perimetro.length; index++) {
       if (minas.indexOf(perimetro[index]) !== -1 && perimetro[index] > 0){
          cMinas++;
       }
@@ -302,7 +317,7 @@ function contarMinasAlrededor(celda, minas){
 
 function validarPerimetro(celda, filas){
    var celdasPerimetrales = []
-   for (let index = 0; index < filas; index++) {
+   for (var index = 0; index < filas; index++) {
       if (index != 0) {
          celdasPerimetrales.push(index);
          celdasPerimetrales.push(index*filas);
