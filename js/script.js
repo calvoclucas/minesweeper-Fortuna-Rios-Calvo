@@ -288,14 +288,51 @@ if (miArray.indexOf(valor) !== -1) {
 
 function contarMinasAlrededor(celda, minas){
    var cMinas = 0
-   var perimetro = [celda+8, celda-8, celda-1, celda+1, (celda+1)+ 8, (celda+1)- 8, (celda-1)+ 8, (celda-1)- 8]
-   //Borrar
-   console.log(perimetro)
-
+   var perimetro = validarPerimetro(celda,8);
    for (let index = 0; index < perimetro.length; index++) {
-      if (minas.indexOf(perimetro[index]) !== -1){
+      if (minas.indexOf(perimetro[index]) !== -1 && perimetro[index] > 0){
          cMinas++;
       }
    }
+   if (cMinas == 0) {
+      cMinas = '';
+   }
    return cMinas;
+}
+
+function validarPerimetro(celda, filas){
+   var celdasPerimetrales = []
+   for (let index = 0; index < filas; index++) {
+      if (index != 0) {
+         celdasPerimetrales.push(index);
+         celdasPerimetrales.push(index*filas);
+         celdasPerimetrales.push(index*filas+1)
+      }
+      celdasPerimetrales.push((filas*filas)-index);
+   }
+   console.log(celdasPerimetrales)
+   var aux = celda/filas
+   if (celdasPerimetrales.indexOf(celda)!== -1) {
+      console.log(celda);
+      console.log(celda/filas);
+      if (celda/filas == filas){
+         var perimetro = [celda-8, celda-1, celda+1, (celda+1)- 8, (celda-1)- 8]
+      } else if (celda/filas > filas-1) {
+         var perimetro = [celda-8, celda-1, (celda-1)- 8, celda+1, (celda+1)-8]
+      } else if ((celda/filas > 1 && celda/filas < filas-1 && celda/filas % 2 === 0) || celda/filas == filas-1){
+         var perimetro = [celda-8, celda-1, celda+8, (celda-1)+ 8, (celda-1)- 8]
+      } else if (celda/filas > 1 && celda/filas < filas-1 && celda/filas % 2 !== 0){
+         var perimetro = [celda+8, celda+1, (celda+1)+ 8, (celda+1)- 8, celda-8];
+      } else if (celda/filas < 1 && celda/filas < celda-1){
+         var perimetro = [celda+8, celda-1, celda+1, (celda+1)+ 8, (celda-1)+ 8];
+      }else if (celda == filas) {
+         var perimetro = [celda+8, celda-1, (celda-1)+ 8]
+      } else if (celda == 1) {
+         var perimetro = [celda+8, celda+1, (celda+1)+ 8]
+      } 
+   }else{
+      var perimetro = [celda+8, celda-8, celda-1, celda+1, (celda+1)+ 8, (celda+1)- 8, (celda-1)+ 8, (celda-1)- 8];
+   }
+   console.log(perimetro);
+   return perimetro;
 }
