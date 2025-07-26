@@ -9,7 +9,14 @@
    </head>
    <body>
       <div class="nav">
-         Nav
+        <div class="selector-dificultad">
+         <label for="dificultad">Dificultad:</label>
+         <select id="dificultad">
+            <option value="facil">Fácil</option>
+            <option value="medio">Medio</option>
+            <option value="dificil">Difícil</option>
+         </select>
+         </div>
       </div>
       <div class="main">
          <div class="container">
@@ -18,7 +25,7 @@
                   <span id="mine-counter">010</span>
                </div>
                <div class="resetGameButton">
-                  <span class="image">&#x1F600;</span>
+                  <span id="emoji" class="image">&#x1F600;</span>
                </div>
                <div class="timerGame">
                   00:00

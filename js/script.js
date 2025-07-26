@@ -7,6 +7,8 @@ var timeoutId;
 // REVISAR ESTO 
 var totalMines = 10;
 var flagsPlaced = 0;
+var revealedCount = 0;
+var juegoFinalizado = false;
 
 window.addEventListener('DOMContentLoaded', function () {
    var filas = 8;
@@ -15,59 +17,11 @@ window.addEventListener('DOMContentLoaded', function () {
    var gap = 2;
    var posicionMinas = [];
 
-   posicionMinas = generaMinas(columnas,filas);
+   var resetBtn = document.querySelector('.resetGameButton');
+   resetBtn.addEventListener('click', reiniciarJuego);
 
-   var container = document.querySelector('.container');
-   var grid = document.querySelector('.grid');
-   var timerDisplay = document.querySelector('.timerGame');
-
-   var gridWidth = columnas * cellSize + (columnas - 1) * gap;
-   var gridHeight = filas * cellSize + (filas - 1) * gap;
-
-   grid.style.width = gridWidth + 'px';
-   grid.style.height = gridHeight + 'px';
-   container.style.width = gridWidth + 'px';
-
-   for (var i = 1; i <= filas * columnas; i++) {
-      var cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.id = 'cell-' + i;
-      cell.textContent = i;
-      grid.appendChild(cell);
-
-      //Este es la funcion que escucha los clicks
-      (function (c) {
-         c.addEventListener("click", function () {
-            var partes = c.id.split("-");
-            var r = parseInt(partes[1], 10);
-            if (posicionMinas.indexOf(r) !== -1) {
-               c.className = 'cell-mine';
-               c.textContent = ''; // Borra el texto
-               c.style.backgroundImage = 'url("img/mine.jpeg")';
-               c.style.backgroundSize = 'cover';
-               c.style.backgroundPosition = 'center';
-               stopTimer();
-            }else{
-               revelarZonaLibre(r, posicionMinas, []);
-            }
-         });
-         c.addEventListener("contextmenu",function(e){
-            e.preventDefault();
-            var partes = c.id.split("-");
-            var r = parseInt(partes[1], 10);
-            if (flagsPlaced < totalMines && c.classList[0] != "cell-reveal" && c.classList[0] != "cell-mine") {
-               if (c.textContent == "🚩") {
-                  c.textContent = r;
-                  flagsPlaced--;
-               }else{
-                  c.textContent = "🚩"
-                  flagsPlaced++;
-               }
-               updateMineCounter();
-            }
-         });
-      })(cell);
-   }
+   inicializarTablero(filas, columnas, cellSize, gap);
+   
    clearRanking();
 
    startTimer(timerDisplay);
@@ -269,8 +223,8 @@ function generaMinas(columnas, filas) {
    if (columnas == 8 && filas == 8) {
       var minas = 10;
    }
-   var min = 0
-   var max = (columnas * filas)-1
+   var min = 1
+   var max = (columnas * filas)
 
    var arrayMinas = [];
    var aux = 0
@@ -343,23 +297,126 @@ function validarPerimetro(celda, filas){
    return perimetro;
 }
 
+//Funcion que revela minas vacias y adyasentes.
 function revelarZonaLibre(celdaId, minas, yaReveladas) {
-   if (yaReveladas.indexOf(celdaId) !== -1) return; // evitar loops infinitos
+   if (yaReveladas.indexOf(celdaId) !== -1) return; 
    yaReveladas.push(celdaId);
 
    var celda = document.getElementById("cell-" + celdaId);
    if (!celda || celda.classList.contains("cell-reveal")) return;
 
+   celda.classList.add("cell-reveal");
+   revealedCount++;
+
    var resultado = contarMinasAlrededor(celdaId, minas);
    var cantidad = resultado[0];
    var vecinos = resultado[1];
 
-   celda.className = "cell-reveal";
-   celda.textContent = cantidad;
+   celda.classList.remove(
+   "num-1", "num-2", "num-3", "num-4", "num-5", "num-6", "num-7", "num-8"
+   );
+
+   if (cantidad !== '') {
+      celda.classList.add("num-" + cantidad);
+      celda.innerHTML = cantidad;
+   } else {
+      celda.innerHTML = '&nbsp;';
+   }
+
+   checkWinCondition();
 
    if (cantidad === '') {
       for (var i = 0; i < vecinos.length; i++) {
          revelarZonaLibre(vecinos[i], minas, yaReveladas);
       }
+   }
+}
+
+function checkWinCondition() {
+   var totalCells = 8 * 8; // Generalizar!!!
+   var safeCells = totalCells - totalMines;
+   if (revealedCount >= safeCells) {
+      stopTimer();
+      showError("¡Victoria! Has ganado el juego 🎉");
+      setEmoji('😎');
+      juegoFinalizado = true;
+   }
+}
+
+function inicializarTablero(filas, columnas, cellSize, gap) {
+   posicionMinas = generaMinas(columnas, filas);
+   var grid = document.querySelector('.grid');
+   var container = document.querySelector('.container');
+   grid.innerHTML = '';
+
+   var gridWidth = columnas * cellSize + (columnas - 1) * gap;
+   var gridHeight = filas * cellSize + (filas - 1) * gap;
+
+   grid.style.width = gridWidth + 'px';
+   grid.style.height = gridHeight + 'px';
+   container.style.width = gridWidth + 'px';
+
+   for (var i = 1; i <= filas * columnas; i++) {
+      var cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.id = 'cell-' + i;
+      cell.textContent = i;
+      grid.appendChild(cell);
+
+      (function (c, r) {
+         c.addEventListener("click", function () {
+            if (juegoFinalizado) return;
+            if (posicionMinas.indexOf(r) !== -1) {
+               c.className = 'cell-mine';
+               c.textContent = '&nbsp;';
+               c.style.backgroundImage = 'url("img/mine.jpeg")';
+               c.style.backgroundSize = 'cover';
+               c.style.backgroundPosition = 'center';
+               stopTimer();
+               juegoFinalizado = true;
+               setEmoji('😵');
+            } else {
+               revelarZonaLibre(r, posicionMinas, []);
+            }
+         });
+
+         c.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+            if (juegoFinalizado) return;
+            if (flagsPlaced < totalMines && c.classList[0] !== "cell-reveal" && c.classList[0] !== "cell-mine") {
+               if (c.textContent === "🚩") {
+                  c.textContent = r;
+                  flagsPlaced--;
+               } else {
+                  c.innerHTML = "🚩";
+                  flagsPlaced++;
+               }
+               updateMineCounter();
+            }
+         });
+      })(cell, i);
+   }
+}
+
+function reiniciarJuego() {
+   revealedCount = 0;
+   flagsPlaced = 0;
+   juegoFinalizado = false;
+   seconds = 0;
+
+   updateMineCounter();
+
+   var timerDisplay = document.querySelector('.timerGame');
+   resetTimer(timerDisplay);
+   startTimer(timerDisplay);
+
+   inicializarTablero(8, 8, 40, 2);
+   setEmoji('😄');
+}
+
+function setEmoji(codigoEmoji) {
+   var emoji = document.getElementById('emoji');
+   if (emoji) {
+      emoji.textContent = codigoEmoji;
    }
 }
