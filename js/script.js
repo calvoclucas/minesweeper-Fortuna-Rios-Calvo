@@ -34,13 +34,13 @@ window.addEventListener('DOMContentLoaded', function () {
       cell.id = 'cell-' + i;
       cell.textContent = i;
       grid.appendChild(cell);
+
       //Este es la funcion que escucha los clicks
       (function (c) {
          c.addEventListener("click", function () {
             var partes = c.id.split("-");
             var r = parseInt(partes[1], 10);
             if (posicionMinas.indexOf(r) !== -1) {
-               //alert("Hay una mina en " + r);
                c.className = 'cell-mine';
                c.textContent = ''; // Borra el texto
                c.style.backgroundImage = 'url("img/mine.jpeg")';
@@ -48,19 +48,7 @@ window.addEventListener('DOMContentLoaded', function () {
                c.style.backgroundPosition = 'center';
                stopTimer();
             }else{
-               c.className = 'cell-reveal';
-               var nMinas = contarMinasAlrededor(r, posicionMinas);
-               console.log(nMinas);
-               c.textContent = nMinas[0];
-               if (nMinas[0] == '') {
-                  for (let i = 0; i < nMinas[1].length; i++) {
-                     var concat = "cell-" + nMinas[1][i];
-                     var ad = document.getElementById(concat);
-                     ad.className = "cell-reveal";
-                     var au = contarMinasAlrededor(nMinas[1][i], posicionMinas);
-                     ad.textContent = au[0];
-                  }
-               }
+               revelarZonaLibre(r, posicionMinas, []);
             }
          });
          c.addEventListener("contextmenu",function(e){
@@ -353,4 +341,25 @@ function validarPerimetro(celda, filas){
       var perimetro = [celda+8, celda-8, celda-1, celda+1, (celda+1)+ 8, (celda+1)- 8, (celda-1)+ 8, (celda-1)- 8];
    }
    return perimetro;
+}
+
+function revelarZonaLibre(celdaId, minas, yaReveladas) {
+   if (yaReveladas.indexOf(celdaId) !== -1) return; // evitar loops infinitos
+   yaReveladas.push(celdaId);
+
+   var celda = document.getElementById("cell-" + celdaId);
+   if (!celda || celda.classList.contains("cell-reveal")) return;
+
+   var resultado = contarMinasAlrededor(celdaId, minas);
+   var cantidad = resultado[0];
+   var vecinos = resultado[1];
+
+   celda.className = "cell-reveal";
+   celda.textContent = cantidad;
+
+   if (cantidad === '') {
+      for (var i = 0; i < vecinos.length; i++) {
+         revelarZonaLibre(vecinos[i], minas, yaReveladas);
+      }
+   }
 }
