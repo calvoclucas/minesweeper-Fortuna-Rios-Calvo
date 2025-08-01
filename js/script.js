@@ -3,6 +3,7 @@ var isTimerRunning = false;
 var timerInterval = null;
 var toast;
 var timeoutId;
+var currentPlayerName = "";
 
 // REVISAR ESTO 
 var totalMines = 10;
@@ -11,6 +12,11 @@ var revealedCount = 0;
 var juegoFinalizado = false;
 
 window.addEventListener('DOMContentLoaded', function () {
+   showStartModal();
+   showEndModal("win-modal");
+   showEndModal("lose-modal");
+   initContactModal();
+
    var filas = 8;
    var columnas = 8;
    var cellSize = 40;
@@ -64,6 +70,97 @@ var boton = document.getElementById("cell-1");
 boton.addEventListener("click", function () {
   alert("¡Click detectado en celda 1!");
 });
+
+function showStartModal() {
+   startModal = document.getElementById("startModal");
+   playerNameInput = document.getElementById("playerNameInput");
+   startGameButton = document.getElementById("startGameBtn");
+   nameError = document.getElementById("nameError");
+   startModal.style.display = "block";
+   startGameButton.addEventListener("click", function () {
+      var name = playerNameInput.value.trim();
+      if (validateName(name)) {
+         currentPlayerName = name;
+         startModal.style.display = "none";
+         console.log("Current player:", currentPlayerName);
+         //aca poner funcion para arrancar el juego
+      } else {
+         nameError.style.display = "block";
+      }
+   });
+   playerNameInput.addEventListener("input", function () {
+      nameError.style.display = "none";
+   });
+}
+
+function showEndModal(modalId) {
+   var modal = document.getElementById(modalId);
+   var closeButton = modal.querySelector("button");
+
+   modal.style.display = "block";
+
+   function handleClick() {
+      modal.style.display = "none";
+      closeButton.removeEventListener("click", handleClick);
+   }
+
+   closeButton.addEventListener("click", handleClick);
+}
+
+function initContactModal() {
+   var contactModal = document.getElementById("contact-modal");
+   var openContactBtn = document.getElementById("open-contact-btn");
+   var closeContactBtn = document.getElementById("close-contact");
+   var contactForm = document.getElementById("contact-form");
+
+   openContactBtn.addEventListener("click", function () {
+      contactModal.style.display = "block";
+   });
+
+   closeContactBtn.addEventListener("click", function () {
+      contactModal.style.display = "none";
+   });
+
+   contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var name = document.getElementById("contact-name").value.trim();
+      var email = document.getElementById("contact-email").value.trim();
+      var message = document.getElementById("contact-message").value.trim();
+
+      var valid = true;
+
+      if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ0-9\s]+$/.test(name)) {
+         document.getElementById("contact-name-error").style.display = "block";
+         valid = false;
+      } else {
+         document.getElementById("contact-name-error").style.display = "none";
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+         document.getElementById("contact-email-error").style.display = "block";
+         valid = false;
+      } else {
+         document.getElementById("contact-email-error").style.display = "none";
+      }
+
+      if (message.length <= 5) {
+         document.getElementById("contact-message-error").style.display = "block";
+         valid = false;
+      } else {
+         document.getElementById("contact-message-error").style.display = "none";
+      }
+
+      if (valid) {
+         var mailto = "mailto:tuemail@ejemplo.com"
+            + "?subject=Contacto de " + encodeURIComponent(name)
+            + "&body=" + encodeURIComponent(message + "\n\nEmail: " + email);
+         window.location.href = mailto;
+      }
+   });
+}
+
+
 
 function startTimer(timerDisplay) {
    if (isTimerRunning) return;
