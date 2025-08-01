@@ -5,6 +5,11 @@ var toast;
 var timeoutId;
 var currentPlayerName = "";
 
+// REVISAR ESTO 
+var totalMines = 10;
+var flagsPlaced = 0;
+var revealedCount = 0;
+var juegoFinalizado = false;
 
 window.addEventListener('DOMContentLoaded', function () {
    showStartModal();
@@ -16,25 +21,13 @@ window.addEventListener('DOMContentLoaded', function () {
    var columnas = 8;
    var cellSize = 40;
    var gap = 2;
+   var posicionMinas = [];
 
-   var container = document.querySelector('.container');
-   var grid = document.querySelector('.grid');
-   var timerDisplay = document.querySelector('.timerGame');
+   var resetBtn = document.querySelector('.resetGameButton');
+   resetBtn.addEventListener('click', reiniciarJuego);
 
-   var gridWidth = columnas * cellSize + (columnas - 1) * gap;
-   var gridHeight = filas * cellSize + (filas - 1) * gap;
-
-   grid.style.width = gridWidth + 'px';
-   grid.style.height = gridHeight + 'px';
-   container.style.width = gridWidth + 'px';
-
-   for (var i = 1; i <= filas * columnas; i++) {
-      var cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.id = 'cell-' + i;
-      cell.textContent = i;
-      grid.appendChild(cell);
-   }
+   inicializarTablero(filas, columnas, cellSize, gap);
+   
    clearRanking();
 
    startTimer(timerDisplay);
@@ -72,6 +65,11 @@ window.addEventListener('DOMContentLoaded', function () {
 
 });
 
+var boton = document.getElementById("cell-1");
+
+boton.addEventListener("click", function () {
+  alert("¡Click detectado en celda 1!");
+});
 
 function showStartModal() {
    startModal = document.getElementById("startModal");
@@ -199,8 +197,6 @@ function validateName(name) {
    return /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{3,}$/.test(name.trim());
 }
 
-var totalMines = 10;
-var flagsPlaced = 0;
 
 function updateMineCounter() {
    var remaining = totalMines - flagsPlaced;
@@ -317,4 +313,207 @@ function mostrarToast() {
 function cerrarToast() {
    toast.classList.remove("mostrar");
    clearTimeout(timeoutId);
+}
+
+function generaMinas(columnas, filas) {
+   //Hay que agregar las condiciones por si cambia el tamaño cambia la cantidad de  minas
+   if (columnas == 8 && filas == 8) {
+      var minas = 10;
+   }
+   var min = 1
+   var max = (columnas * filas)
+
+   var arrayMinas = [];
+   var aux = 0
+
+   for (var index = 0; index < minas; index++) {
+
+      aux = numeroAleatorio(min, max);
+      while (arrayMinas.indexOf(aux) !== -1) {
+         aux = numeroAleatorio(min, max);
+      }
+      arrayMinas[index] = aux; 
+      
+   }
+   return arrayMinas;
+
+}
+
+function numeroAleatorio(min, max) {
+   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+if (miArray.indexOf(valor) !== -1) {
+  // El valor está en el arreglo
+}
+
+function contarMinasAlrededor(celda, minas){
+   var cMinas = 0
+   var perimetro = validarPerimetro(celda,8);
+   for (var index = 0; index < perimetro.length; index++) {
+      if (minas.indexOf(perimetro[index]) !== -1 && perimetro[index] > 0){
+         cMinas++;
+      }
+   }
+   if (cMinas == 0) {
+      cMinas = '';
+   }
+   return [cMinas, perimetro];
+}
+
+function validarPerimetro(celda, filas){
+   var celdasPerimetrales = []
+   for (var index = 0; index < filas; index++) {
+      if (index != 0) {
+         celdasPerimetrales.push(index);
+         celdasPerimetrales.push(index*filas);
+         celdasPerimetrales.push(index*filas+1)
+      }
+      celdasPerimetrales.push((filas*filas)-index);
+   }
+   var aux = celda/filas
+   if (celdasPerimetrales.indexOf(celda)!== -1) {
+      if (celda/filas == filas){
+         var perimetro = [celda-8, celda-1, celda+1, (celda+1)- 8, (celda-1)- 8]
+      } else if (celda/filas > filas-1) {
+         var perimetro = [celda-8, celda-1, (celda-1)- 8, celda+1, (celda+1)-8]
+      } else if ((celda/filas > 1 && celda/filas < filas-1 && celda/filas % 2 === 0) || celda/filas == filas-1){
+         var perimetro = [celda-8, celda-1, celda+8, (celda-1)+ 8, (celda-1)- 8]
+      } else if (celda/filas > 1 && celda/filas < filas-1 && celda/filas % 2 !== 0){
+         var perimetro = [celda+8, celda+1, (celda+1)+ 8, (celda+1)- 8, celda-8];
+      } else if (celda/filas < 1 && celda/filas < celda-1){
+         var perimetro = [celda+8, celda-1, celda+1, (celda+1)+ 8, (celda-1)+ 8];
+      }else if (celda == filas) {
+         var perimetro = [celda+8, celda-1, (celda-1)+ 8]
+      } else if (celda == 1) {
+         var perimetro = [celda+8, celda+1, (celda+1)+ 8]
+      } 
+   }else{
+      var perimetro = [celda+8, celda-8, celda-1, celda+1, (celda+1)+ 8, (celda+1)- 8, (celda-1)+ 8, (celda-1)- 8];
+   }
+   return perimetro;
+}
+
+//Funcion que revela minas vacias y adyasentes.
+function revelarZonaLibre(celdaId, minas, yaReveladas) {
+   if (yaReveladas.indexOf(celdaId) !== -1) return; 
+   yaReveladas.push(celdaId);
+
+   var celda = document.getElementById("cell-" + celdaId);
+   if (!celda || celda.classList.contains("cell-reveal")) return;
+
+   celda.classList.add("cell-reveal");
+   revealedCount++;
+
+   var resultado = contarMinasAlrededor(celdaId, minas);
+   var cantidad = resultado[0];
+   var vecinos = resultado[1];
+
+   celda.classList.remove(
+   "num-1", "num-2", "num-3", "num-4", "num-5", "num-6", "num-7", "num-8"
+   );
+
+   if (cantidad !== '') {
+      celda.classList.add("num-" + cantidad);
+      celda.innerHTML = cantidad;
+   } else {
+      celda.innerHTML = '&nbsp;';
+   }
+
+   checkWinCondition();
+
+   if (cantidad === '') {
+      for (var i = 0; i < vecinos.length; i++) {
+         revelarZonaLibre(vecinos[i], minas, yaReveladas);
+      }
+   }
+}
+
+function checkWinCondition() {
+   var totalCells = 8 * 8; // Generalizar!!!
+   var safeCells = totalCells - totalMines;
+   if (revealedCount >= safeCells) {
+      stopTimer();
+      showError("¡Victoria! Has ganado el juego 🎉");
+      setEmoji('😎');
+      juegoFinalizado = true;
+   }
+}
+
+function inicializarTablero(filas, columnas, cellSize, gap) {
+   posicionMinas = generaMinas(columnas, filas);
+   var grid = document.querySelector('.grid');
+   var container = document.querySelector('.container');
+   grid.innerHTML = '';
+
+   var gridWidth = columnas * cellSize + (columnas - 1) * gap;
+   var gridHeight = filas * cellSize + (filas - 1) * gap;
+
+   grid.style.width = gridWidth + 'px';
+   grid.style.height = gridHeight + 'px';
+   container.style.width = gridWidth + 'px';
+
+   for (var i = 1; i <= filas * columnas; i++) {
+      var cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.id = 'cell-' + i;
+      cell.textContent = i;
+      grid.appendChild(cell);
+
+      (function (c, r) {
+         c.addEventListener("click", function () {
+            if (juegoFinalizado) return;
+            if (posicionMinas.indexOf(r) !== -1) {
+               c.className = 'cell-mine';
+               c.textContent = '&nbsp;';
+               c.style.backgroundImage = 'url("img/mine.jpeg")';
+               c.style.backgroundSize = 'cover';
+               c.style.backgroundPosition = 'center';
+               stopTimer();
+               juegoFinalizado = true;
+               setEmoji('😵');
+            } else {
+               revelarZonaLibre(r, posicionMinas, []);
+            }
+         });
+
+         c.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+            if (juegoFinalizado) return;
+            if (flagsPlaced < totalMines && c.classList[0] !== "cell-reveal" && c.classList[0] !== "cell-mine") {
+               if (c.textContent === "🚩") {
+                  c.textContent = r;
+                  flagsPlaced--;
+               } else {
+                  c.innerHTML = "🚩";
+                  flagsPlaced++;
+               }
+               updateMineCounter();
+            }
+         });
+      })(cell, i);
+   }
+}
+
+function reiniciarJuego() {
+   revealedCount = 0;
+   flagsPlaced = 0;
+   juegoFinalizado = false;
+   seconds = 0;
+
+   updateMineCounter();
+
+   var timerDisplay = document.querySelector('.timerGame');
+   resetTimer(timerDisplay);
+   startTimer(timerDisplay);
+
+   inicializarTablero(8, 8, 40, 2);
+   setEmoji('😄');
+}
+
+function setEmoji(codigoEmoji) {
+   var emoji = document.getElementById('emoji');
+   if (emoji) {
+      emoji.textContent = codigoEmoji;
+   }
 }
