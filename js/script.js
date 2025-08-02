@@ -4,8 +4,6 @@ var timerInterval = null;
 var toast;
 var timeoutId;
 var currentPlayerName = "";
-
-// REVISAR ESTO 
 var totalMines = 10;
 var flagsPlaced = 0;
 var revealedCount = 0;
@@ -13,13 +11,35 @@ var juegoFinalizado = false;
 
 var filas = 8;
 var columnas = 8;
+var cellSize = 40;
+var gap = 2;
+var timerDisplay = document.querySelector('.timerGame');
+var dificultad = document.getElementById('dificultad');
+
 
 window.addEventListener('DOMContentLoaded', function () {
-   //showStartModal();
-   //initContactModal();
+   showStartModal();
+   initContactModal();
+   
+   dificultad.addEventListener("change", function () {
+      if (dificultad.value == 'facil'){
+         filas = 8;
+         columnas = 8;
+         totalMines = 10;
+         reiniciarJuego();
+      }else if (dificultad.value == 'medio') {
+         filas = 12;
+         columnas = 12;
+         totalMines = 22;
+         reiniciarJuego();
+      } else if(dificultad.value == 'dificil'){
+         filas = 16;
+         columnas = 16;
+         totalMines = 44;
+         reiniciarJuego();
+      }
+   })
 
-   var cellSize = 40;
-   var gap = 2;
    var posicionMinas = [];
 
    var resetBtn = document.querySelector('.resetGameButton');
@@ -28,8 +48,6 @@ window.addEventListener('DOMContentLoaded', function () {
    inicializarTablero(filas, columnas, cellSize, gap);
    
    clearRanking();
-
-   startTimer(timerDisplay);
 
    var nombreJugador = "Lucas";
    saveResult(nombreJugador, calculateScore(), getDuration());
@@ -81,7 +99,6 @@ function showStartModal() {
       if (validateName(name)) {
          currentPlayerName = name;
          startModal.style.display = "none";
-         console.log("Current player:", currentPlayerName);
          //aca poner funcion para arrancar el juego
       } else {
          nameError.style.display = "block";
@@ -298,7 +315,6 @@ function getDuration() {
 function clearRanking() {
    localStorage.removeItem("minesweeperResults");
    renderRanking();
-   console.log("Ranking eliminado.");
 }
 
 function mostrarToast() {
@@ -315,10 +331,15 @@ function cerrarToast() {
 }
 
 function generaMinas(columnas, filas) {
-   //Hay que agregar las condiciones por si cambia el tamaño cambia la cantidad de  minas
-   if (columnas == 8 && filas == 8) {
-      var minas = 10;
+   var minas = 8;
+   if (filas == 8) {
+      minas == 8;
+   }else if(filas == 12){
+      minas = 14;
+   }else if (filas == 16) {
+      minas = 18;
    }
+
    var min = 1
    var max = (columnas * filas)
 
@@ -349,7 +370,6 @@ if (miArray.indexOf(valor) !== -1) {
 function contarMinasAlrededor(celda, minas){
    var cMinas = 0
    var perimetro = validarPerimetro(celda,filas);
-   console.log(perimetro);
    for (var index = 0; index < perimetro.length; index++) {
       if (minas.indexOf(perimetro[index]) !== -1 && perimetro[index] > 0){
          cMinas++;
@@ -364,10 +384,7 @@ function contarMinasAlrededor(celda, minas){
 
 function validarPerimetro(celda, filas){
    var celdasPerimetrales = []
-   console.log(celda);
    var f = Math.trunc((celda/filas)-0.01)+1;
-   console.log("Fila: " + f);
-   console.log("Desde: "+ (filas*f-filas+1) +"Hasta: " + filas*f)
    var c = '';
    for (let i = 0; i < filas+1; i++) {
       if ((filas*f-filas+1+i) == celda) {
@@ -375,7 +392,6 @@ function validarPerimetro(celda, filas){
          c++
       }
    }
-   console.log("columna: " + (c))
      if(c== 1 && f == 1){
          var perimetro = [celda+1, celda+filas, (celda+1)+filas];
      } else if(c == 1 && f == filas){
@@ -434,11 +450,10 @@ function revelarZonaLibre(celdaId, minas, yaReveladas) {
 }
 
 function checkWinCondition() {
-   var totalCells = 8 * 8; // Generalizar!!!
+   var totalCells = filas * filas; // Generalizar!!!
    var safeCells = totalCells - totalMines;
-   if (revealedCount >= safeCells) {
+   if (revealedCount >= safeCells || flagsPlaced == totalMines) {
       stopTimer();
-      //showError("¡Victoria! Has ganado el juego 🎉");
       showEndModal("win-modal");
       setEmoji('😎');
       juegoFinalizado = true;
@@ -479,6 +494,7 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
                setEmoji('😵');
                showEndModal("lose-modal");
             } else {
+               startTimer(timerDisplay);
                revelarZonaLibre(r, posicionMinas, []);
             }
          });
@@ -506,14 +522,9 @@ function reiniciarJuego() {
    flagsPlaced = 0;
    juegoFinalizado = false;
    seconds = 0;
-
    updateMineCounter();
-
-   var timerDisplay = document.querySelector('.timerGame');
    resetTimer(timerDisplay);
-   startTimer(timerDisplay);
-
-   inicializarTablero(8, 8, 40, 2);
+   inicializarTablero(filas, columnas, cellSize, gap);
    setEmoji('😄');
 }
 
