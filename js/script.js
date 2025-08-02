@@ -11,12 +11,13 @@ var flagsPlaced = 0;
 var revealedCount = 0;
 var juegoFinalizado = false;
 
+var filas = 8;
+var columnas = 8;
+
 window.addEventListener('DOMContentLoaded', function () {
    //showStartModal();
    //initContactModal();
 
-   var filas = 8;
-   var columnas = 8;
    var cellSize = 40;
    var gap = 2;
    var posicionMinas = [];
