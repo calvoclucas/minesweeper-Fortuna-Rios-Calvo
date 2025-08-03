@@ -495,7 +495,7 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
          c.addEventListener("contextmenu", function (e) {
             e.preventDefault();
             if (juegoFinalizado) return;
-            if (flagsPlaced < totalMines && c.classList[0] !== "cell-reveal" && c.classList[0] !== "cell-mine") {
+            if (c.classList[0] !== "cell-reveal" && c.classList[0] !== "cell-mine") {
             if (c.querySelector('.flag')) {
                   c.innerHTML = "";
                   flagsPlaced--;
