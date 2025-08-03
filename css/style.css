@@ -3,13 +3,92 @@
 	src: url('../fonts/Seven\ Segment.ttf') format('truetype');
 }
 
-.nav{
-	padding: 30px;
-	text-align: center;
+body {
+  background-color: white;
+  color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+
+body.dark-mode .modal-content {
+  background-color: #111 !important;
+  color: #eee !important;
+  border-color: #444 !important;
+}
+
+
+body.dark-mode .button {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: 1px solid #555 !important;
+}
+
+body.dark-mode .button:hover {
+  background-color: #555 !important;
+  color: #fff !important;
+}
+
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: #222 !important;
+  color: #eee !important;
+  border: 1px solid #555 !important;
+}
+
+
+body.dark-mode .nav {
+  background-color: #111 !important;
+  border-bottom: 1px solid #444 !important;
+}
+
+
+
+body.dark-mode .toast {
+  background-color: #900 !important;
+  color: #fff !important;
+}
+
+body.dark-mode .counterGame,
+body.dark-mode .timerGame {
+  background-color: #000 !important;
+  color: #f00 !important;
+  border-color: #900 !important;
+}
+
+body.dark-mode .grid {
+  background-color: #000 !important;
+  border-color: #555 !important;
+}
+
+
+
+
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
 }
 
 .selector-dificultad {
-  margin: 10px auto;
+  flex: 1 1 100%;
   text-align: center;
   font-family: sans-serif;
 }
@@ -17,6 +96,7 @@
 .selector-dificultad select {
   padding: 4px 10px;
   font-size: 16px;
+  margin-top: 10px;
 }
 
 .main {
@@ -184,6 +264,8 @@
 	background-color: #f4f4f4;
 	font-weight: bold;
 }
+
+
 
 .toast {
 	visibility: hidden;

@@ -15,6 +15,8 @@ var cellSize = 40;
 var gap = 2;
 var timerDisplay = document.querySelector('.timerGame');
 var dificultad = document.getElementById('dificultad');
+var loseSound = new Audio("audio/Perder.mp3");
+var winSound = new Audio("audio/Ganar.mp3");
 
 
 window.addEventListener('DOMContentLoaded', function () {
@@ -46,27 +48,24 @@ window.addEventListener('DOMContentLoaded', function () {
    resetBtn.addEventListener('click', reiniciarJuego);
 
    inicializarTablero(filas, columnas, cellSize, gap);
-   
-   clearRanking();
-
-   var nombreJugador = "Lucas";
-   saveResult(nombreJugador, calculateScore(), getDuration());
-   var nombreJugador = "Pepe";
-   saveResult(nombreJugador, calculateScore(), getDuration());
-   var nombreJugador = "Ricardo";
-   saveResult(nombreJugador, calculateScore(), getDuration());
-
 
    var modal = document.getElementById("rankingModal");
    var btn = document.getElementById("openBtn");
-   var span = document.getElementsByClassName("close")[0];
+   var spanRankingClose = document.querySelector("#rankingModal .close");
+
+   var ordenarRankingSelect = document.getElementById('ordenarRanking');
+
+   ordenarRankingSelect.addEventListener('change', function () {
+   renderRanking(this.value); // llama con 'score' o 'date'
+   });
 
    btn.onclick = function () {
-      renderRanking();
-      modal.style.display = "block";
+   var criterio = ordenarRankingSelect.value || 'score';
+   renderRanking(criterio);
+   modal.style.display = "block";
    };
 
-   span.onclick = function () {
+  spanRankingClose.onclick = function () {
       modal.style.display = "none";
    };
 
@@ -78,7 +77,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
 
    toast = document.getElementById("toast");
-   showError("Aca van los mensajes de errores");
+   //showError("Aca van los mensajes de errores");
+
+   cambiarModo();
 
 });
 
@@ -244,7 +245,7 @@ function saveResult(playerName, score, duration) {
       player: playerName,
       score: score,
       duration: duration,
-      date: new Date().toLocaleString()
+      date: new Date().toISOString() 
    };
 
    results.push(newResult);
@@ -252,26 +253,24 @@ function saveResult(playerName, score, duration) {
    console.log("Resultado guardado:", newResult);
 }
 
-function renderRanking() {
-   var results = JSON.parse(localStorage.getItem("minesweeperResults")) || [];
+function renderRanking(sortBy = 'score') {
+  var results = JSON.parse(localStorage.getItem("minesweeperResults")) || [];
 
-   results.sort(function (a, b) {
-      return b.score - a.score;
-   });
+  sortResults(results, sortBy);
 
-   var rankingBody = document.getElementById("rankingBody");
-   rankingBody.innerHTML = "";
+  var rankingBody = document.getElementById("rankingBody");
+  rankingBody.innerHTML = "";
 
-   for (var i = 0; i < results.length; i++) {
-      var r = results[i];
-      var row = document.createElement("tr");
-      row.innerHTML =
-         "<td>" + r.player + "</td>" +
-         "<td>" + r.score + "</td>" +
-         "<td>" + r.duration + "</td>" +
-         "<td>" + r.date + "</td>";
-      rankingBody.appendChild(row);
-   }
+  for (var i = 0; i < results.length; i++) {
+    var r = results[i];
+    var row = document.createElement("tr");
+    row.innerHTML =
+      "<td>" + r.player + "</td>" +
+      "<td>" + r.score + "</td>" +
+      "<td>" + r.duration + "</td>" +
+      "<td>" + new Date(r.date).toLocaleString() + "</td>";
+    rankingBody.appendChild(row);
+  }
 }
 
 
@@ -293,19 +292,20 @@ window.onclick = function (event) {
 };
 
 function sortResults(results, sortBy) {
-   if (sortBy === 'score') {
-      results.sort(function (a, b) {
-         return b.score - a.score;
-      });
-   } else if (sortBy === 'date') {
-      results.sort(function (a, b) {
-         return new Date(b.date) - new Date(a.date);
-      });
-   }
+  if (sortBy === 'score') {
+    results.sort(function (a, b) {
+      return b.score - a.score;
+    });
+  } else if (sortBy === 'date') {
+    results.sort(function (a, b) {
+      return new Date(b.date) - new Date(a.date);
+    });
+  }
 }
 
+
 function calculateScore() {
-   return Math.max(1000 - seconds, 0);
+  return Math.max(1000 - seconds, 0); 
 }
 
 function getDuration() {
@@ -445,9 +445,11 @@ function checkWinCondition() {
    var safeCells = totalCells - totalMines;
    if (revealedCount >= safeCells || flagsPlaced == totalMines) {
       stopTimer();
+      winSound.play();
       showEndModal("win-modal");
       setEmoji('😎');
       juegoFinalizado = true;
+      saveResult(currentPlayerName, calculateScore(), getDuration());
    }
 }
 
@@ -468,7 +470,7 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
       var cell = document.createElement('div');
       cell.className = 'cell';
       cell.id = 'cell-' + i;
-      cell.textContent = i;
+      //cell.textContent = i;
       grid.appendChild(cell);
 
       (function (c, r) {
@@ -476,14 +478,15 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
             if (juegoFinalizado) return;
             if (posicionMinas.indexOf(r) !== -1) {
                c.className = 'cell-mine';
-               c.textContent = '&nbsp;';
                c.style.backgroundImage = 'url("img/mine.jpeg")';
                c.style.backgroundSize = 'cover';
                c.style.backgroundPosition = 'center';
                stopTimer();
                juegoFinalizado = true;
                setEmoji('😵');
+               loseSound.play();
                showEndModal("lose-modal");
+               saveResult(currentPlayerName, calculateScore(), getDuration());
             } else {
                startTimer(timerDisplay);
                revelarZonaLibre(r, posicionMinas, []);
@@ -524,4 +527,26 @@ function setEmoji(codigoEmoji) {
    if (emoji) {
       emoji.textContent = codigoEmoji;
    }
+}
+
+function cambiarModo() {
+  const boton = document.getElementById('toggleTheme');
+  const temaActual = localStorage.getItem('theme');
+  const prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (temaActual === 'dark' || (!temaActual && prefiereOscuro)) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
+
+  boton.onclick = () => {
+    document.body.classList.toggle('dark-mode');
+
+    if (document.body.classList.contains('dark-mode')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  };
 }
