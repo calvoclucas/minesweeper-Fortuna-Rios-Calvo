@@ -15,7 +15,7 @@ body.dark-mode {
 }
 
 
-body.dark-mode .modal-content {
+body.dark-mode .modalContent {
   background-color: #111 !important;
   color: #eee !important;
   border-color: #444 !important;
@@ -222,7 +222,7 @@ body.dark-mode .rankingTable td {
 	background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+.modalContent {
 	background-color: #fff;
 	margin: 10% auto;
 	padding: 20px;
@@ -411,8 +411,8 @@ body.dark-mode .rankingTable td {
   margin-right: 5px;
 }
 
-#contact-form input,
-#contact-form textarea {
+#contactForm  input,
+#contactForm  textarea {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
@@ -423,6 +423,6 @@ body.dark-mode .rankingTable td {
   box-sizing: border-box;
 }
 
-#contact-form textarea {
+#contactForm  textarea {
   resize: vertical;
 }

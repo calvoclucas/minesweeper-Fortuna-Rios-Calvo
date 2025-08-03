@@ -10,8 +10,8 @@
    <body>
       
       <!-- Modal Inicio Juego-->
-      <div id="startModal" class = "modal">
-         <div class="modal-content">
+      <div id="startModal" class="modal">
+         <div class="modalContent">
             <h2>Ingrese su nombre</h2>
             <input type="text" id="playerNameInput" placeholder="Nombre del jugador">
             <p id="nameError" class="error">El nombre debe tener al menos 3 letras.</p>
@@ -19,8 +19,8 @@
          </div>
       </div>
       <!-- Modal Ganar -->
-      <div id="win-modal" class="modal">
-         <div class="modal-content">
+      <div id="winModal" class="modal">
+         <div class="modalContent">
             <h2>¡Ganaste!</h2>
             <p>Felicitaciones, despejaste todas las minas.</p>
             <button class="button">Cerrar</button>
@@ -28,27 +28,28 @@
       </div>
 
       <!-- Modal Perder -->
-      <div id="lose-modal" class="modal">
-         <div class="modal-content">
+      <div id="loseModal" class="modal">
+         <div class="modalContent">
             <h2>Perdiste</h2>
             <p>Oops, tocaste una mina.</p>
             <button class="button">Cerrar</button>
          </div>
       </div>
+
       <!-- Modal Contacto-->
-      <div id="contact-modal" class="modal">
-         <div class="modal-content">
-            <span class="close" id="close-contact">&times;</span>
+      <div id="contactModal" class="modal">
+         <div class="modalContent">
+            <span class="close" id="closeContact">&times;</span>
             <h2>Contacto</h2>
-            <form id="contact-form">
-               <input type="text" id="contact-name" placeholder="Nombre" required>
-               <p id="contact-name-error" class="error">Nombre inválido, solo caracteres alfanuméricos</p>
+            <form id="contactForm">
+               <input type="text" id="contactName" placeholder="Nombre" required>
+               <p id="contactNameError" class="error">Nombre inválido, solo caracteres alfanuméricos</p>
 
-               <input type="email" id="contact-email" placeholder="Email" required>
-               <p id="contact-email-error" class="error">Email inválido</p>
+               <input type="email" id="contactEmail" placeholder="Email" required>
+               <p id="contactEmailError" class="error">Email inválido</p>
 
-               <textarea id="contact-message" placeholder="Mensaje" rows="5" required></textarea>
-               <p id="contact-message-error" class="error">El mensaje debe tener más de 5 caracteres</p>
+               <textarea id="contactMessage" placeholder="Mensaje" rows="5" required></textarea>
+               <p id="contactMessageError" class="error">El mensaje debe tener más de 5 caracteres</p>
 
                <button type="submit" class="button">Enviar</button>
             </form>
@@ -58,10 +59,10 @@
 
       <div class="nav">
       <div class="toggleTheme">
-         <button id="toggleTheme" aria-label="Cambiar modo claro/oscuro">Cambiar modo</button>
+         <button id="toggleTheme" class="button small" aria-label="Cambiar modo claro/oscuro">Cambiar modo</button>
       </div>
       <div class="nav-links">
-            <button id="open-contact-btn" class="button small">Contacto</button>
+            <button id="openContactBtn" class="button small">Contacto</button>
             <a href="https://github.com/calvoclucas/minesweeper-Fortuna-Rios-Calvo" class="button small" target="_blank">
                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/github.svg" alt="GitHub" class="github-icon">GitHub
             </a>

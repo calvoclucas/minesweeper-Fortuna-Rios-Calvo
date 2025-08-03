@@ -90,21 +90,24 @@ boton.addEventListener("click", function () {
 });
 
 function showStartModal() {
-   startModal = document.getElementById("startModal");
-   playerNameInput = document.getElementById("playerNameInput");
-   startGameButton = document.getElementById("startGameBtn");
-   nameError = document.getElementById("nameError");
+   var startModal = document.getElementById("startModal");
+   var playerNameInput = document.getElementById("playerNameInput");
+   var startGameButton = document.getElementById("startGameBtn");
+   var nameError = document.getElementById("nameError");
+
    startModal.style.display = "block";
+
    startGameButton.addEventListener("click", function () {
       var name = playerNameInput.value.trim();
       if (validateName(name)) {
          currentPlayerName = name;
          startModal.style.display = "none";
-         //aca poner funcion para arrancar el juego
+         // acá poner función para arrancar el juego
       } else {
          nameError.style.display = "block";
       }
    });
+
    playerNameInput.addEventListener("input", function () {
       nameError.style.display = "none";
    });
@@ -124,11 +127,12 @@ function showEndModal(modalId) {
    closeButton.addEventListener("click", handleClick);
 }
 
+
 function initContactModal() {
-   var contactModal = document.getElementById("contact-modal");
-   var openContactBtn = document.getElementById("open-contact-btn");
-   var closeContactBtn = document.getElementById("close-contact");
-   var contactForm = document.getElementById("contact-form");
+   var contactModal = document.getElementById("contactModal");
+   var openContactBtn = document.getElementById("openContactBtn");
+   var closeContactBtn = document.getElementById("closeContact");
+   var contactForm = document.getElementById("contactForm");
 
    openContactBtn.addEventListener("click", function () {
       contactModal.style.display = "block";
@@ -141,31 +145,31 @@ function initContactModal() {
    contactForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      var name = document.getElementById("contact-name").value.trim();
-      var email = document.getElementById("contact-email").value.trim();
-      var message = document.getElementById("contact-message").value.trim();
+      var name = document.getElementById("contactName").value.trim();
+      var email = document.getElementById("contactEmail").value.trim();
+      var message = document.getElementById("contactMessage").value.trim();
 
-      var valid = true;
+      let valid = true;
 
       if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ0-9\s]+$/.test(name)) {
-         document.getElementById("contact-name-error").style.display = "block";
+         document.getElementById("contactNameError").style.display = "block";
          valid = false;
       } else {
-         document.getElementById("contact-name-error").style.display = "none";
+         document.getElementById("contactNameError").style.display = "none";
       }
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-         document.getElementById("contact-email-error").style.display = "block";
+         document.getElementById("contactEmailError").style.display = "block";
          valid = false;
       } else {
-         document.getElementById("contact-email-error").style.display = "none";
+         document.getElementById("contactEmailError").style.display = "none";
       }
 
       if (message.length <= 5) {
-         document.getElementById("contact-message-error").style.display = "block";
+         document.getElementById("contactMessageError").style.display = "block";
          valid = false;
       } else {
-         document.getElementById("contact-message-error").style.display = "none";
+         document.getElementById("contactMessageError").style.display = "none";
       }
 
       if (valid) {
@@ -446,7 +450,7 @@ function checkWinCondition() {
    if (revealedCount >= safeCells || flagsPlaced == totalMines) {
       stopTimer();
       winSound.play();
-      showEndModal("win-modal");
+      showEndModal("winModal");
       setEmoji('😎');
       juegoFinalizado = true;
       saveResult(currentPlayerName, calculateScore(), getDuration());
@@ -483,8 +487,15 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
                stopTimer();
                juegoFinalizado = true;
                setEmoji('😵');
+               for (var index = 0; index < posicionMinas.length; index++) {
+                  var aux = document.getElementById("cell-"+posicionMinas[index]);
+                  aux.className = 'cell-mine';
+                  aux.style.backgroundImage = 'url("img/mine.jpeg")';
+                  aux.style.backgroundSize = 'cover';
+                  aux.style.backgroundPosition = 'center';
+               } //Muestra las minas
                loseSound.play();
-               showEndModal("lose-modal");
+               showEndModal("loseModal");
                saveResult(currentPlayerName, calculateScore(), getDuration());
             } else {
                startTimer(timerDisplay);
@@ -529,9 +540,9 @@ function setEmoji(codigoEmoji) {
 }
 
 function cambiarModo() {
-  const boton = document.getElementById('toggleTheme');
-  const temaActual = localStorage.getItem('theme');
-  const prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var boton = document.getElementById('toggleTheme');
+  var temaActual = localStorage.getItem('theme');
+  var prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   if (temaActual === 'dark' || (!temaActual && prefiereOscuro)) {
     document.body.classList.add('dark-mode');
