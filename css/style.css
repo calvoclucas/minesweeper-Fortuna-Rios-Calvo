@@ -125,16 +125,20 @@ body.dark-mode .grid {
 
 
 .cell {
-	flex: 0 0 40px;
-	background-color: lightgray;
-	border: 1px solid #999;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 12px;
-	user-select: none;
-	box-sizing: border-box;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  background-color: lightgray;
+  border: 1px solid #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  user-select: none;
+  box-sizing: border-box;
+  overflow: hidden; 
 }
+
 
 .cell-mine{
 	flex: 0 0 40px;
@@ -332,14 +336,14 @@ body.dark-mode .grid {
 
 
 
-.num-1 { color: #0000ff; }       /* Azul */
-.num-2 { color: #008000; }       /* Verde */
-.num-3 { color: #ff0000; }       /* Rojo */
-.num-4 { color: #000080; }       /* Azul oscuro */
-.num-5 { color: #800000; }       /* Marrón oscuro */
-.num-6 { color: #00cccc; }       /* Cian */
-.num-7 { color: #000000; }       /* Negro */
-.num-8 { color: #808080; }       /* Gris */
+.num-1 { color: #0000ff; }      
+.num-2 { color: #008000; }       
+.num-3 { color: #ff0000; }       
+.num-4 { color: #000080; }       
+.num-5 { color: #800000; }     
+.num-6 { color: #00cccc; }       
+.num-7 { color: #000000; }       
+.num-8 { color: #808080; }       
 
 .button {
   padding: 10px 20px;
@@ -369,6 +373,15 @@ body.dark-mode .grid {
   display: flex;
   gap: 10px;
 }
+
+.flag {
+  font-size: 14px; /* Ajustá el tamaño para que no se agrande la celda */
+  display: inline-block;
+  line-height: 1;
+  pointer-events: none;
+}
+
+
 
 .button.small {
   padding: 6px 12px;

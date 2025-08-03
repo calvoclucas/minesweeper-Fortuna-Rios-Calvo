@@ -470,7 +470,6 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
       var cell = document.createElement('div');
       cell.className = 'cell';
       cell.id = 'cell-' + i;
-      //cell.textContent = i;
       grid.appendChild(cell);
 
       (function (c, r) {
@@ -497,13 +496,13 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
             e.preventDefault();
             if (juegoFinalizado) return;
             if (flagsPlaced < totalMines && c.classList[0] !== "cell-reveal" && c.classList[0] !== "cell-mine") {
-               if (c.textContent === "🚩") {
-                  c.textContent = r;
+            if (c.querySelector('.flag')) {
+                  c.innerHTML = "";
                   flagsPlaced--;
-               } else {
-                  c.innerHTML = "🚩";
+                  } else {
+                  c.innerHTML = '<span class="flag">🚩</span>';
                   flagsPlaced++;
-               }
+                  }
                updateMineCounter();
             }
          });
