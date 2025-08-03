@@ -1,3 +1,4 @@
+"use strict"
 var seconds = 0;
 var isTimerRunning = false;
 var timerInterval = null;
@@ -306,7 +307,7 @@ function resetTimer(timerDisplay) {
    timerDisplay.textContent = "00:00";
 }
 
-//END TIMER LOGIC
+// END TIMER LOGIC
 
 // START RANKING LOGIC
 function initRanking(){
@@ -362,6 +363,8 @@ function sortResults(results, sortBy) {
     });
   }
 }
+
+// END RANKING LOGIc
 
 // EXTRAS
 
