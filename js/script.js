@@ -181,7 +181,7 @@ function contarMinasAlrededor(celda, minas){
 function validarPerimetro(celda, filas){
    var f = Math.trunc((celda/filas)-0.01)+1;
    var c = '';
-   for (let i = 0; i < filas+1; i++) {
+   for (var i = 0; i < filas+1; i++) {
       if ((filas*f-filas+1+i) == celda) {
          c = i;
          c++
@@ -449,7 +449,7 @@ function initContactModal() {
       var email = document.getElementById("contactEmail").value.trim();
       var message = document.getElementById("contactMessage").value.trim();
 
-      let valid = true;
+      var valid = true;
 
       if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ0-9\s]+$/.test(name)) {
          document.getElementById("contactNameError").style.display = "block";
