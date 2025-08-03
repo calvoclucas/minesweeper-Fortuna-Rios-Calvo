@@ -30,12 +30,12 @@ window.addEventListener('DOMContentLoaded', function () {
       }else if (dificultad.value == 'medio') {
          filas = 12;
          columnas = 12;
-         totalMines = 22;
+         totalMines = 25;
          reiniciarJuego();
       } else if(dificultad.value == 'dificil'){
          filas = 16;
          columnas = 16;
-         totalMines = 44;
+         totalMines = 40;
          reiniciarJuego();
       }
    })
@@ -331,22 +331,13 @@ function cerrarToast() {
 }
 
 function generaMinas(columnas, filas) {
-   var minas = 8;
-   if (filas == 8) {
-      minas == 8;
-   }else if(filas == 12){
-      minas = 14;
-   }else if (filas == 16) {
-      minas = 18;
-   }
-
    var min = 1
    var max = (columnas * filas)
 
    var arrayMinas = [];
    var aux = 0
 
-   for (var index = 0; index < minas; index++) {
+   for (var index = 0; index < totalMines; index++) {
 
       aux = numeroAleatorio(min, max);
       while (arrayMinas.indexOf(aux) !== -1) {
