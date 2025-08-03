@@ -8,7 +8,6 @@
       <link href="https://fonts.googleapis.com/css2?family=DS-Digital&display=swap" rel="stylesheet">
    </head>
    <body>
-      
       <!-- Modal Inicio Juego-->
       <div id="startModal" class="modal">
          <div class="modalContent">
@@ -28,7 +27,6 @@
             <button class="button">Cerrar</button>
          </div>
       </div>
-
       <!-- Modal Perder -->
       <div id="loseModal" class="modal">
          <div class="modalContent">
@@ -37,7 +35,6 @@
             <button class="button">Cerrar</button>
          </div>
       </div>
-
       <!-- Modal Contacto-->
       <div id="contactModal" class="modal">
          <div class="modalContent">
@@ -46,25 +43,21 @@
             <form id="contactForm">
                <input type="text" id="contactName" placeholder="Nombre" required>
                <p id="contactNameError" class="error">Nombre inválido, solo caracteres alfanuméricos</p>
-
                <input type="email" id="contactEmail" placeholder="Email" required>
                <p id="contactEmailError" class="error">Email inválido</p>
-
                <textarea id="contactMessage" placeholder="Mensaje" rows="5" required></textarea>
                <p id="contactMessageError" class="error">El mensaje debe tener más de 5 caracteres</p>
-
                <button type="submit" class="button">Enviar</button>
             </form>
          </div>
       </div>
-
       <!-- Modal Ranking-->
       <div id="rankingModal" class="modal">
          <div class="modalContent">
             <span class="close">&times;</span>
             <h2>Ranking</h2>
             <label for="ordenarRanking">Ordenar por:</label>
-               <select id="ordenarRanking">
+            <select id="ordenarRanking">
                <option value="score">Puntaje</option>
                <option value="date">Fecha</option>
             </select>
@@ -81,16 +74,17 @@
             </table>
          </div>
       </div>
-
       <div class="nav">
          <button id="openBtn" class="button small">Ver Ranking</button>
-         <button id="toggleTheme" class="button small">Modo oscuro</button>
+         <button id="toggleTheme" class="button small">
+         Claro / Oscuro
+         </button>
          <button id="openContactBtn" class="button small">Contacto</button>
          <a href="https://github.com/calvoclucas/minesweeper-Fortuna-Rios-Calvo" class="button small" target="_blank">
-            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/github.svg" alt="GitHub" class="github-icon">GitHub
+         <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/github.svg" alt="GitHub" class="icon">GitHub
          </a>
       </div>
-      <div class="selector-dificultad">
+      <div class="selectorDificultad">
          <label for="dificultad">Dificultad:</label>
          <select id="dificultad">
             <option value="facil">Fácil</option>
@@ -99,16 +93,12 @@
          </select>
       </div>
       </div>
-
-
-  
-
       <div class="main">
          <div class="container">
             <div id="board">
                <div class="playButtons">
                   <div class="counterGame">
-                     <span id="mine-counter">010</span>
+                     <span id="mineCounter">010</span>
                   </div>
                   <div class="resetGameButton">
                      <span id="emoji" class="image">&#x1F600;</span>
@@ -117,10 +107,8 @@
                      00:00
                   </div>
                </div>
-                  <div class="grid">
+               <div class="grid">
                </div>
-               
-            
             </div>
          </div>
       </div>

@@ -9,7 +9,7 @@ var totalMines = 10;
 var flagsPlaced = 0;
 var revealedCount = 0;
 var juegoFinalizado = false;
-
+var posicionMinas = [];
 var filas = 8;
 var columnas = 8;
 var cellSize = 40;
@@ -25,27 +25,7 @@ window.addEventListener('DOMContentLoaded', function () {
    initContactModal();
    initRanking();
    initChangeThemeButton();
-   
-   dificultad.addEventListener("change", function () {
-      if (dificultad.value == 'facil'){
-         filas = 8;
-         columnas = 8;
-         totalMines = 10;
-         reiniciarJuego();
-      }else if (dificultad.value == 'medio') {
-         filas = 12;
-         columnas = 12;
-         totalMines = 25;
-         reiniciarJuego();
-      } else if(dificultad.value == 'dificil'){
-         filas = 16;
-         columnas = 16;
-         totalMines = 40;
-         reiniciarJuego();
-      }
-   })
-   var resetBtn = document.querySelector('.resetGameButton');
-   resetBtn.addEventListener('click', reiniciarJuego);
+   initDifficultySetting();
    inicializarTablero(filas, columnas, cellSize, gap);
 });
 
@@ -82,7 +62,7 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
                juegoFinalizado = true;
                setEmoji('😵');
                for (var index = 0; index < posicionMinas.length; index++) {
-                  var aux = document.getElementById("cell-"+posicionMinas[index]);
+                  var aux = document.getElementById("cell-" + posicionMinas[index]);
                   aux.className = 'cell-mine';
                   aux.style.backgroundImage = 'url("img/mine.jpeg")';
                   aux.style.backgroundSize = 'cover';
@@ -101,13 +81,13 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
             e.preventDefault();
             if (juegoFinalizado) return;
             if (c.classList[0] !== "cell-reveal" && c.classList[0] !== "cell-mine") {
-            if (c.querySelector('.flag')) {
+               if (c.querySelector('.flag')) {
                   c.innerHTML = "";
                   flagsPlaced--;
-                  } else {
+               } else {
                   c.innerHTML = '<span class="flag">🚩</span>';
                   flagsPlaced++;
-                  }
+               }
                updateMineCounter();
             }
          });
@@ -118,7 +98,7 @@ function inicializarTablero(filas, columnas, cellSize, gap) {
 
 function updateMineCounter() {
    var remaining = totalMines - flagsPlaced;
-   document.getElementById("mine-counter").textContent = remaining;
+   document.getElementById("mineCounter").textContent = remaining;
 }
 
 function saveResult(playerName, score, duration) {
@@ -128,7 +108,7 @@ function saveResult(playerName, score, duration) {
       player: playerName,
       score: score,
       duration: duration,
-      date: new Date().toISOString() 
+      date: new Date().toISOString()
    };
 
    results.push(newResult);
@@ -137,7 +117,7 @@ function saveResult(playerName, score, duration) {
 }
 
 function calculateScore() {
-  return Math.max(1000 - seconds, 0); 
+   return Math.max(1000 - seconds, 0);
 }
 
 function generaMinas(columnas, filas) {
@@ -153,8 +133,8 @@ function generaMinas(columnas, filas) {
       while (arrayMinas.indexOf(aux) !== -1) {
          aux = numeroAleatorio(min, max);
       }
-      arrayMinas[index] = aux; 
-      
+      arrayMinas[index] = aux;
+
    }
    return arrayMinas;
 
@@ -164,11 +144,11 @@ function numeroAleatorio(min, max) {
    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function contarMinasAlrededor(celda, minas){
+function contarMinasAlrededor(celda, minas) {
    var cMinas = 0
-   var perimetro = validarPerimetro(celda,filas);
+   var perimetro = validarPerimetro(celda, filas);
    for (var index = 0; index < perimetro.length; index++) {
-      if (minas.indexOf(perimetro[index]) !== -1 && perimetro[index] > 0){
+      if (minas.indexOf(perimetro[index]) !== -1 && perimetro[index] > 0) {
          cMinas++;
       }
    }
@@ -178,39 +158,39 @@ function contarMinasAlrededor(celda, minas){
    return [cMinas, perimetro];
 }
 
-function validarPerimetro(celda, filas){
-   var f = Math.trunc((celda/filas)-0.01)+1;
+function validarPerimetro(celda, filas) {
+   var f = Math.trunc((celda / filas) - 0.01) + 1;
    var c = '';
-   for (var i = 0; i < filas+1; i++) {
-      if ((filas*f-filas+1+i) == celda) {
+   for (var i = 0; i < filas + 1; i++) {
+      if ((filas * f - filas + 1 + i) == celda) {
          c = i;
          c++
       }
    }
-     if(c== 1 && f == 1){
-         var perimetro = [celda+1, celda+filas, (celda+1)+filas];
-     } else if(c == 1 && f == filas){
-         var perimetro = [celda+1, celda-filas, (celda-1)+filas];
-     } else if (c == filas && f == 1) {
-         var perimetro = [celda-1, celda+filas, (celda-1)+filas];
-     } else if(c == filas && f == filas){
-         var perimetro = [celda-1, celda-filas, (celda-1)-filas];
-     } else if (c==1){
-         var perimetro = [celda+1, celda-filas, (celda-filas)+1, celda+filas, (celda+filas)+1];
-     } else if(c== filas){
-         var perimetro = [celda-1, celda-filas, (celda-filas)-1, celda+filas, (celda+filas)-1]
-     } else if (f== 1){
-         var perimetro = [celda-1, celda+1, (celda+1)+filas, (celda-1)+filas, celda+filas]
-     } else if (f== filas) {
-         var perimetro = [celda-filas, celda-1, celda+1, (celda+1)-filas, (celda-1)-filas]
-     }else{
-      var perimetro = [celda+filas, celda-filas, celda-1, celda+1, (celda+1)+ filas, (celda+1)- filas, (celda-1)+ filas, (celda-1)- filas];
+   if (c == 1 && f == 1) {
+      var perimetro = [celda + 1, celda + filas, (celda + 1) + filas];
+   } else if (c == 1 && f == filas) {
+      var perimetro = [celda + 1, celda - filas, (celda - 1) + filas];
+   } else if (c == filas && f == 1) {
+      var perimetro = [celda - 1, celda + filas, (celda - 1) + filas];
+   } else if (c == filas && f == filas) {
+      var perimetro = [celda - 1, celda - filas, (celda - 1) - filas];
+   } else if (c == 1) {
+      var perimetro = [celda + 1, celda - filas, (celda - filas) + 1, celda + filas, (celda + filas) + 1];
+   } else if (c == filas) {
+      var perimetro = [celda - 1, celda - filas, (celda - filas) - 1, celda + filas, (celda + filas) - 1]
+   } else if (f == 1) {
+      var perimetro = [celda - 1, celda + 1, (celda + 1) + filas, (celda - 1) + filas, celda + filas]
+   } else if (f == filas) {
+      var perimetro = [celda - filas, celda - 1, celda + 1, (celda + 1) - filas, (celda - 1) - filas]
+   } else {
+      var perimetro = [celda + filas, celda - filas, celda - 1, celda + 1, (celda + 1) + filas, (celda + 1) - filas, (celda - 1) + filas, (celda - 1) - filas];
    }
    return perimetro;
 }
 
 function revelarZonaLibre(celdaId, minas, yaReveladas) {
-   if (yaReveladas.indexOf(celdaId) !== -1) return; 
+   if (yaReveladas.indexOf(celdaId) !== -1) return;
    yaReveladas.push(celdaId);
 
    var celda = document.getElementById("cell-" + celdaId);
@@ -224,14 +204,14 @@ function revelarZonaLibre(celdaId, minas, yaReveladas) {
    var vecinos = resultado[1];
 
    celda.classList.remove(
-   "num-1", "num-2", "num-3", "num-4", "num-5", "num-6", "num-7", "num-8"
+      "num-1", "num-2", "num-3", "num-4", "num-5", "num-6", "num-7", "num-8"
    );
 
    if (cantidad !== '') {
       celda.classList.add("num-" + cantidad);
       celda.innerHTML = cantidad;
    } else {
-      celda.innerHTML = '&nbsp;';
+      celda.innerHTML = ' ';
    }
 
    checkWinCondition();
@@ -310,7 +290,7 @@ function resetTimer(timerDisplay) {
 // END TIMER LOGIC
 
 // START RANKING LOGIC
-function initRanking(){
+function initRanking() {
    var modal = document.getElementById("rankingModal");
    var btn = document.getElementById("openBtn");
    var spanRankingClose = document.querySelector("#rankingModal .close");
@@ -333,35 +313,35 @@ function initRanking(){
 }
 
 function renderRanking(sortBy = 'score') {
-  var results = JSON.parse(localStorage.getItem("minesweeperResults")) || [];
+   var results = JSON.parse(localStorage.getItem("minesweeperResults")) || [];
 
-  sortResults(results, sortBy);
+   sortResults(results, sortBy);
 
-  var rankingBody = document.getElementById("rankingBody");
-  rankingBody.innerHTML = "";
+   var rankingBody = document.getElementById("rankingBody");
+   rankingBody.innerHTML = "";
 
-  for (var i = 0; i < results.length; i++) {
-    var r = results[i];
-    var row = document.createElement("tr");
-    row.innerHTML =
-      "<td>" + r.player + "</td>" +
-      "<td>" + r.score + "</td>" +
-      "<td>" + r.duration + "</td>" +
-      "<td>" + new Date(r.date).toLocaleString() + "</td>";
-    rankingBody.appendChild(row);
-  }
+   for (var i = 0; i < results.length; i++) {
+      var r = results[i];
+      var row = document.createElement("tr");
+      row.innerHTML =
+         "<td>" + r.player + "</td>" +
+         "<td>" + r.score + "</td>" +
+         "<td>" + r.duration + "</td>" +
+         "<td>" + new Date(r.date).toLocaleString() + "</td>";
+      rankingBody.appendChild(row);
+   }
 }
 
 function sortResults(results, sortBy) {
-  if (sortBy === 'score') {
-    results.sort(function (a, b) {
-      return b.score - a.score;
-    });
-  } else if (sortBy === 'date') {
-    results.sort(function (a, b) {
-      return new Date(b.date) - new Date(a.date);
-    });
-  }
+   if (sortBy === 'score') {
+      results.sort(function (a, b) {
+         return b.score - a.score;
+      });
+   } else if (sortBy === 'date') {
+      results.sort(function (a, b) {
+         return new Date(b.date) - new Date(a.date);
+      });
+   }
 }
 
 // END RANKING LOGIc
@@ -393,25 +373,25 @@ function showStartModal() {
 }
 
 function initChangeThemeButton() {
-  var boton = document.getElementById('toggleTheme');
-  var temaActual = localStorage.getItem('theme');
-  var prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+   var boton = document.getElementById('toggleTheme');
+   var temaActual = localStorage.getItem('theme');
+   var prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  if (temaActual === 'dark' || (!temaActual && prefiereOscuro)) {
-    document.body.classList.add('dark-mode');
-  } else {
-    document.body.classList.remove('dark-mode');
-  }
+   if (temaActual === 'dark' || (!temaActual && prefiereOscuro)) {
+      document.body.classList.add('darkMode');
+   } else {
+      document.body.classList.remove('darkMode');
+   }
 
-  boton.onclick = () => {
-    document.body.classList.toggle('dark-mode');
+   boton.onclick = () => {
+      document.body.classList.toggle('darkMode');
 
-    if (document.body.classList.contains('dark-mode')) {
-      localStorage.setItem('theme', 'dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-    }
-  };
+      if (document.body.classList.contains('darkMode')) {
+         localStorage.setItem('theme', 'dark');
+      } else {
+         localStorage.setItem('theme', 'light');
+      }
+   };
 }
 
 function showEndModal(modalId) {
@@ -473,10 +453,33 @@ function initContactModal() {
       }
 
       if (valid) {
-         var mailto = "mailto:tuemail@ejemplo.com"
-            + "?subject=Contacto de " + encodeURIComponent(name)
-            + "&body=" + encodeURIComponent(message + "\n\nEmail: " + email);
+         var mailto = "mailto:tuemail@ejemplo.com" +
+            "?subject=Contacto de " + encodeURIComponent(name) +
+            "&body=" + encodeURIComponent(message + "\n\nEmail: " + email);
          window.location.href = mailto;
       }
    });
+}
+
+function initDifficultySetting() {
+   dificultad.addEventListener("change", function () {
+      if (dificultad.value == 'facil') {
+         filas = 8;
+         columnas = 8;
+         totalMines = 10;
+         reiniciarJuego();
+      } else if (dificultad.value == 'medio') {
+         filas = 12;
+         columnas = 12;
+         totalMines = 25;
+         reiniciarJuego();
+      } else if (dificultad.value == 'dificil') {
+         filas = 16;
+         columnas = 16;
+         totalMines = 40;
+         reiniciarJuego();
+      }
+   })
+   var resetBtn = document.querySelector('.resetGameButton');
+   resetBtn.addEventListener('click', reiniciarJuego);
 }

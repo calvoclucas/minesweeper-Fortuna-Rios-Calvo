@@ -1,120 +1,122 @@
 @font-face {
-	font-family: 'SevenSegment';
-	src: url('../fonts/Seven\ Segment.ttf') format('truetype');
+	font-family: "SevenSegment";
+	src: url("../fonts/Seven\ Segment.ttf") format("truetype");
 }
 
-body, h1, h2, h3, h4, h5, h6, input, button, select, textarea, p {
-  font-family: sans-serif;
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+button,
+select,
+textarea,
+p {
+	font-family: sans-serif;
 }
 
 body {
-  background-color: white;
-  color: black;
-  transition: background-color 0.3s ease, color 0.3s ease;
+	background-color: white;
+	color: black;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.dark-mode {
-  background-color: #121212;
-  color: #e0e0e0;
+body.darkMode {
+	background-color: #121212;
+	color: #e0e0e0;
 }
 
-
-body.dark-mode .modalContent {
-  background-color: #111 !important;
-  color: #eee !important;
-  border-color: #444 !important;
+body.darkMode .modalContent {
+	background-color: #111 !important;
+	color: #eee !important;
+	border-color: #444 !important;
 }
 
-
-body.dark-mode .button {
-  background-color: #222 !important;
-  color: #fff !important;
-  border: 1px solid #555 !important;
+body.darkMode .button {
+	background-color: #222 !important;
+	color: #fff !important;
+	border: 1px solid #555 !important;
 }
 
-body.dark-mode .button:hover {
-  background-color: #555 !important;
-  color: #fff !important;
+body.darkMode .button:hover {
+	background-color: #555 !important;
+	color: #fff !important;
 }
 
-
-body.dark-mode input,
-body.dark-mode textarea,
-body.dark-mode select {
-  background-color: #222 !important;
-  color: #eee !important;
-  border: 1px solid #555 !important;
+body.darkMode input,
+body.darkMode textarea,
+body.darkMode select {
+	background-color: #222 !important;
+	color: #eee !important;
+	border: 1px solid #555 !important;
 }
 
-
-body.dark-mode .nav {
-  background-color: #111 !important;
-  border-bottom: 1px solid #444 !important;
+body.darkMode .nav {
+	background-color: #111 !important;
+	border-bottom: 1px solid #444 !important;
 }
 
-
-
-body.dark-mode .toast {
-  background-color: #900 !important;
-  color: #fff !important;
+body.darkMode .toast {
+	background-color: #900 !important;
+	color: #fff !important;
 }
 
-body.dark-mode .counterGame,
-body.dark-mode .timerGame {
-  background-color: #000 !important;
-  color: #f00 !important;
-  border-color: #900 !important;
+body.darkMode .counterGame,
+body.darkMode .timerGame {
+	background-color: #000 !important;
+	color: #f00 !important;
+	border-color: #900 !important;
 }
 
-body.dark-mode .grid {
-  background-color: #000 !important;
-  border-color: #555 !important;
+body.darkMode .grid {
+	background-color: #000 !important;
+	border-color: #555 !important;
 }
 
-
-body.dark-mode .rankingTable thead {
-  background-color: #1e1e1e !important;
-  color: #e0e0e0 !important;
+body.darkMode .rankingTable thead {
+	background-color: #1e1e1e !important;
+	color: #e0e0e0 !important;
 }
 
-body.dark-mode .rankingTable th {
-  background-color: #1e1e1e !important;
-  color: #e0e0e0 !important;
-  border: 1px solid #444 !important;
+body.darkMode .rankingTable th {
+	background-color: #1e1e1e !important;
+	color: #e0e0e0 !important;
+	border: 1px solid #444 !important;
 }
 
-body.dark-mode .rankingTable td {
-  background-color: #222 !important;
-  color: #ddd !important;
-  border: 1px solid #444 !important;
+body.darkMode .rankingTable td {
+	background-color: #222 !important;
+	color: #ddd !important;
+	border: 1px solid #444 !important;
 }
-
-
 
 .nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 30px;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #ccc;
-  gap: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 30px;
+	background-color: #f0f0f0;
+	border-bottom: 1px solid #ccc;
+	gap: 10px;
 }
 
 .nav-links {
-  display: flex;
-  gap: 10px;
+	display: flex;
+	gap: 10px;
 }
 
-.selector-dificultad {
-  flex: 1 1 100%;
-  text-align: center;
+.selectorDificultad {
+	flex: 1 1 100%;
+	text-align: center;
 }
 
-.selector-dificultad select {
-  padding: 4px 10px;
-  font-size: 16px;
-  margin-top: 10px;
+.selectorDificultad select {
+	padding: 4px 10px;
+	font-size: 16px;
+	margin-top: 10px;
 }
 
 .main {
@@ -138,27 +140,26 @@ body.dark-mode .rankingTable td {
 	padding: 0;
 	box-sizing: content-box;
 	justify-content: center;
-	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+		"Lucida Sans", Arial, sans-serif;
 }
-
 
 .cell {
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
-  background-color: lightgray;
-  border: 1px solid #999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  user-select: none;
-  box-sizing: border-box;
-  overflow: hidden; 
+	flex: 0 0 40px;
+	width: 40px;
+	height: 40px;
+	background-color: lightgray;
+	border: 1px solid #999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	user-select: none;
+	box-sizing: border-box;
+	overflow: hidden;
 }
 
-
-.cell-mine{
+.cell-mine {
 	flex: 0 0 40px;
 	background-color: red;
 	border: 1px solid #999;
@@ -168,10 +169,10 @@ body.dark-mode .rankingTable td {
 	font-size: 12px;
 	user-select: none;
 	box-sizing: border-box;
-	background-image: url('mine.png');
+	background-image: url("mine.png");
 }
 
-.cell-reveal{
+.cell-reveal {
 	flex: 0 0 40px;
 	background-color: white;
 	border: 1px solid #999;
@@ -181,9 +182,8 @@ body.dark-mode .rankingTable td {
 	font-size: 12px;
 	user-select: none;
 	box-sizing: border-box;
-	background-image: url('mine.png');
+	background-image: url("mine.png");
 }
-
 
 .playButtons {
 	background-color: lightgray;
@@ -198,7 +198,7 @@ body.dark-mode .rankingTable td {
 
 .counterGame,
 .timerGame {
-	font-family: 'SevenSegment', monospace;
+	font-family: "SevenSegment", monospace;
 	font-size: 30px;
 	color: #ff0000;
 	background-color: #111;
@@ -235,7 +235,7 @@ body.dark-mode .rankingTable td {
 }
 
 #startModal .modalContent button {
-  margin-top: 15px;
+	margin-top: 15px;
 }
 
 .close {
@@ -297,76 +297,95 @@ body.dark-mode .rankingTable td {
 	transform: scale(1.05);
 }
 
+.num-1 {
+	color: #0000ff;
+}
 
+.num-2 {
+	color: #008000;
+}
 
-.num-1 { color: #0000ff; }      
-.num-2 { color: #008000; }       
-.num-3 { color: #ff0000; }       
-.num-4 { color: #000080; }       
-.num-5 { color: #800000; }     
-.num-6 { color: #00cccc; }       
-.num-7 { color: #000000; }       
-.num-8 { color: #808080; }       
+.num-3 {
+	color: #ff0000;
+}
+
+.num-4 {
+	color: #000080;
+}
+
+.num-5 {
+	color: #800000;
+}
+
+.num-6 {
+	color: #00cccc;
+}
+
+.num-7 {
+	color: #000000;
+}
+
+.num-8 {
+	color: #808080;
+}
 
 .button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  border: none;
-  color: white;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-align: center;
+	padding: 10px 20px;
+	background-color: #007bff;
+	border: none;
+	color: white;
+	font-size: 16px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	text-align: center;
 }
 
 .button:hover {
-  background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 .nav {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 10px 20px;
-  gap: 10px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 10px 20px;
+	gap: 10px;
 }
 
 .flag {
-  font-size: 14px; /* Ajustá el tamaño para que no se agrande la celda */
-  display: inline-block;
-  line-height: 1;
-  pointer-events: none;
+	font-size: 14px;
+	display: inline-block;
+	line-height: 1;
+	pointer-events: none;
 }
-
-
 
 .button.small {
-  padding: 6px 12px;
-  font-size: 14px;
+	padding: 6px 12px;
+	font-size: 14px;
 }
 
-.github-icon {
-  width: 16px;
-  height: 16px;
-  filter: invert(1);
-  margin-right: 5px;
+.icon {
+	width: 16px;
+	height: 16px;
+	filter: invert(1);
+	margin-right: 5px;
 }
 
-#contactForm  input,
-#contactForm  textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  box-sizing: border-box;
+#contactForm input,
+#contactForm textarea {
+	width: 100%;
+	padding: 10px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	font-size: 14px;
+	box-sizing: border-box;
 }
 
-#contactForm  textarea {
-  resize: vertical;
+#contactForm textarea {
+	resize: vertical;
 }
 
 #board {
@@ -374,12 +393,13 @@ body.dark-mode .rankingTable td {
 }
 
 @media (max-width: 800px) {
-  #board {
-    transform: scale(0.8);
-  }
+	#board {
+		transform: scale(0.8);
+	}
 }
+
 @media (max-width: 560px) {
-  #board {
-    transform: scale(0.6);
-  }
+	#board {
+		transform: scale(0.6);
+	}
 }
