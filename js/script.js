@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 var seconds = 0;
 var isTimerRunning = false;
 var timerInterval = null;
