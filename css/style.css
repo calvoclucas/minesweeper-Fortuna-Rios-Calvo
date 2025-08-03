@@ -3,6 +3,10 @@
 	src: url('../fonts/Seven\ Segment.ttf') format('truetype');
 }
 
+body, h1, h2, h3, h4, h5, h6, input, button, select, textarea, p {
+  font-family: sans-serif;
+}
+
 body {
   background-color: white;
   color: black;
@@ -105,7 +109,6 @@ body.dark-mode .rankingTable td {
 .selector-dificultad {
   flex: 1 1 100%;
   text-align: center;
-  font-family: sans-serif;
 }
 
 .selector-dificultad select {
@@ -229,6 +232,10 @@ body.dark-mode .rankingTable td {
 	width: 80%;
 	max-width: 600px;
 	border-radius: 8px;
+}
+
+#startModal .modalContent button {
+  margin-top: 15px;
 }
 
 .close {
@@ -362,15 +369,17 @@ body.dark-mode .rankingTable td {
   resize: vertical;
 }
 
-@media (max-width: 720px) {
+#board {
+	transform-origin: top center;
+}
+
+@media (max-width: 800px) {
   #board {
     transform: scale(0.8);
-    transform-origin: top center;
   }
 }
 @media (max-width: 560px) {
   #board {
     transform: scale(0.6);
-    transform-origin: top center;
   }
 }

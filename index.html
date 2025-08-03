@@ -14,8 +14,10 @@
          <div class="modalContent">
             <h2>Ingrese su nombre</h2>
             <input type="text" id="playerNameInput" placeholder="Nombre del jugador">
-            <p id="nameError" class="error">El nombre debe tener al menos 3 letras.</p>
-            <button id="startGameBtn" class="button">Iniciar juego</button>
+            <div>
+               <p id="nameError" class="error">El nombre debe tener al menos 3 letras.</p>
+            </div>
+            <button id="startGameBtn" class="button">Aceptar</button>
          </div>
       </div>
       <!-- Modal Ganar -->
@@ -58,7 +60,7 @@
 
       <!-- Modal Ranking-->
       <div id="rankingModal" class="modal">
-         <div class="modal-content">
+         <div class="modalContent">
             <span class="close">&times;</span>
             <h2>Ranking</h2>
             <label for="ordenarRanking">Ordenar por:</label>
