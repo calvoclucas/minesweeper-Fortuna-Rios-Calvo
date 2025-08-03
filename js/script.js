@@ -117,7 +117,7 @@ function saveResult(playerName, score, duration) {
 }
 
 function calculateScore() {
-   return Math.max(1000 - seconds, 0);
+   return Math.max((revealedCount * 10) + (flagsPlaced * 20) - (seconds * 2), 0);
 }
 
 function generaMinas(columnas, filas) {
